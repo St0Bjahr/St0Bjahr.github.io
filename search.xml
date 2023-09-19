@@ -1,6 +1,1210 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>指针进阶</title>
+    <url>/2023/09/19/Pointer%20Advanced/</url>
+    <content><![CDATA[<h1 id="指针进阶"><a href="#指针进阶" class="headerlink" title="指针进阶"></a>指针进阶</h1><h2 id="头文件"><a href="#头文件" class="headerlink" title="头文件"></a>头文件</h2><pre><code class="lang-c">#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;string.h&gt;
+</code></pre>
+<h3 id="字符指针"><a href="#字符指针" class="headerlink" title="字符指针"></a>字符指针</h3><pre><code class="lang-c">int main()
+&#123;
+    //字符指针
+    char arr1[]=&quot;abcdef&quot;;
+    char arr2[]=&quot;abcdef&quot;;
+    char* p1=&quot;abcdef&quot;;
+    char* p2=&quot;abcdef&quot;;
+    if (arr1==arr2)
+    &#123;
+        printf(&quot;hehe\n&quot;);
+    &#125;
+    else
+    &#123;
+        printf(&quot;haha\n&quot;);
+    &#125;
+    if (p1==p2)
+    &#123;
+        printf(&quot;hehe\n&quot;);
+    &#125;
+    else
+    &#123;
+        printf(&quot;haha\n&quot;);
+    &#125;
+    printf(&quot;arr1:%p\n&quot;,arr1);
+    printf(&quot;arr2:%p\n&quot;,arr2);
+    printf(&quot;p1:%p\n&quot;,p1);
+    printf(&quot;p2:%p\n&quot;,p2);
+    return 0;
+&#125;
+</code></pre>
+<h3 id="指针数组"><a href="#指针数组" class="headerlink" title="指针数组"></a>指针数组</h3><pre><code class="lang-c">int main()
+&#123;
+    int arr1[]=&#123;1,2,3,4,5&#125;;
+    int arr2[]=&#123;2,3,4,5,6&#125;;
+    int arr3[]=&#123;3,4,5,6,7&#125;;
+
+    int* parr[]=&#123;arr1,arr2,arr3&#125;;//指针数组-数组-存放指针的数组
+    int i = 0;
+    for (i=0;i&lt;3;i++)
+    &#123;
+        int j=0;
+        for (j=0;j&lt;5;j++)
+        &#123;
+            printf(&quot;%d &quot;,*(parr[i]+j));
+        &#125;
+        printf(&quot;\n&quot;);
+    &#125;
+    return 0;
+&#125;
+</code></pre>
+<h3 id="数组指针"><a href="#数组指针" class="headerlink" title="数组指针"></a>数组指针</h3><pre><code class="lang-c">int main()
+&#123;
+    int arr[5]=&#123;1,2,3,4,5&#125;;
+    int (*p)[5]=&amp;arr;//数组指针-指针-数组的地址要存起来
+
+    return 0;
+&#125;
+
+int main()
+&#123;
+    char* arr[5];
+    char* (*p)[5]=&amp;arr;
+    return 0;
+&#125;
+
+int main()
+&#123;
+    int arr[10]=&#123;1,2,3,4,5,6,7,8,9,10&#125;;
+    int *p=arr;//arr[i]==*(arr+i)==*(p+i)==p[i]
+    int i=0;
+    for(i=0;i&lt;10;i++)
+    &#123;
+        printf(&quot;%d &quot;,*(p+i));
+    &#125;
+
+    // int (*p)[10]=&amp;arr;
+    // int i=0;
+    // for(i=0;i&lt;10;i++)
+    // &#123;
+    //     printf(&quot;%d &quot;,(*p)[i]);
+    // &#125;
+
+    // for(i=0;i&lt;10;i++)
+    // &#123;
+    //     printf(&quot;%d &quot;,*(*p+i));//*p==arr
+    // &#125;
+    return 0;
+&#125;
+</code></pre>
+<h3 id="数组参数，指针参数"><a href="#数组参数，指针参数" class="headerlink" title="数组参数，指针参数"></a>数组参数，指针参数</h3><pre><code class="lang-c">//参数是数组的形式
+void print1(int arr[3][5],int x,int y)
+&#123;
+    int i=0;
+    int j=0;
+    for (i=0;i&lt;x;i++)
+    &#123;
+        for (j=0;j&lt;y;j++)
+        &#123;
+            printf(&quot;%d &quot;,arr[i][j]);
+        &#125;
+        printf(&quot;\n&quot;);
+    &#125;
+&#125;
+
+//参数是指针的形式
+void print2(int(*p)[5],int x,int y)
+&#123;
+    int i=0;
+    for(i=0;i&lt;x;i++)
+    &#123;
+        int j=0;
+        for(j=0;j&lt;y;j++)
+        &#123;
+            //printf(&quot;%d &quot;,p[i][j]);
+            //printf(&quot;%d &quot;,*(p[i]+j));
+            printf(&quot;%d &quot;,*(*(p+i)+j));
+            //printf(&quot;%d &quot;,(*(p+i))[j]);
+        &#125;
+        printf(&quot;\n&quot;);
+    &#125;
+&#125;
+</code></pre>
+<h3 id="二维数组传参"><a href="#二维数组传参" class="headerlink" title="二维数组传参"></a>二维数组传参</h3><pre><code class="lang-c">int main()
+&#123;
+    int arr[3][5]=&#123;&#123;1,2,3,4,5&#125;,&#123;2,3,4,5,6&#125;,&#123;3,4,5,6,7&#125;&#125;;
+    print1(arr,3,5);//arr-数组名-数组名就是首元素地址
+    print2(arr,3,5);//
+    return 0;
+&#125;
+
+void test(int arr[3][5])
+&#123;&#125;
+void test1(int arr[][5])//可以省略行
+&#123;&#125;
+// void test2(int arr[3][])//err 不可以省略列
+// &#123;&#125;
+// void test3(int *arr)//err
+// &#123;&#125;
+// void test4(int **arr)//err
+// &#123;&#125;
+void test5(int (*arr)[5])
+&#123;&#125;
+int main()
+&#123;
+    int arr[3][5]=&#123;0&#125;;
+
+    // test(arr);//二维数组传参
+    // test1(arr);
+    // test2(arr);
+    // test3(arr);
+    // test4(arr);
+    test5(arr);
+    return 0;
+&#125;
+
+void test1(int** p)
+&#123;&#125;
+
+int main()
+&#123;
+    int *ptr;
+    test1(&amp;ptr);
+    int **pp=&amp;ptr;
+    test1(pp);
+    int* arr[10];
+    test1(arr);
+    return 0;
+&#125;
+</code></pre>
+<h3 id="函数指针"><a href="#函数指针" class="headerlink" title="函数指针"></a>函数指针</h3><pre><code class="lang-c">//数组指针——是指向数组的指针
+//函数指针——是指向函数的指针——存放函数地址的指针
+
+int Add(int x,int y)
+&#123;
+    int z=0;
+    z=x+y;
+    return z;
+&#125;
+
+int main()
+&#123;
+    int a=10;
+    int b=20;
+    // int arr[10]=&#123;0&#125;;
+    // int (*p)[10]=&amp;arr;
+    //printf(&quot;%d\n&quot;,Add(a,b));
+
+    //&amp;arr;
+    //arr;  
+
+    //&amp;函数名 和 函数名 都是函数的地址
+    /*
+    printf(&quot;%p\n&quot;,&amp;Add);
+    printf(&quot;%p\n&quot;,Add);
+    */
+    int (*pa)(int,int) = Add;
+    printf(&quot;%d\n&quot;,(*pa)(2,3));
+    return 0;
+&#125;
+
+void Print(char* str)
+&#123;
+    printf(&quot;%s\n&quot;,str);
+&#125;
+
+int main()
+&#123;
+    void (*p)(char*) = Print;
+    (*p)(&quot;hello bite&quot;);
+
+    return 0;
+&#125;
+
+// 代码一
+// (*(void(*)())0)();
+// void(*)()-函数指针类型
+// 把0强制类型转换成void(*)()函数指针类型-0就是一个函数地址
+// 调用0地址处的该函数
+
+// 代码二
+// void (*singal(int ,void(*)(int)))(int);
+// signal是一个函数声明
+// signal第一个参数整形，第二个参数是函数指针类型，该函数指针指向的函数的参数是int，返回类型是void
+// signal函数返回类型-函数指针-void(*   singal(int,void(*)(int)) )(int)
+// 简化
+// typedef void(*pfun_t)(int);
+// pfun_t signal(int,pfun_t);
+
+// typedef unsigned int unit;
+
+int Add(int x,int y)
+&#123;
+    int z=0;
+    z=x+y;
+    return z;
+&#125;
+
+int main()
+&#123;
+    int a=10;
+    int b=20;
+
+    int (*pa)(int,int) = Add;
+    printf(&quot;%d\n&quot;,pa(2,3));
+    printf(&quot;%d\n&quot;,Add(2,3));
+    printf(&quot;%d\n&quot;,(*pa)(2,3));//*是摆设
+
+    // printf(&quot;%d\n&quot;,(**pa)(2,3));
+    // printf(&quot;%d\n&quot;,(***pa)(2,3));没必要
+    return 0;
+&#125;
+</code></pre>
+<h3 id="函数指针数组"><a href="#函数指针数组" class="headerlink" title="函数指针数组"></a>函数指针数组</h3><pre><code class="lang-c">int Add(int x,int y)
+&#123;
+    return x+y;
+&#125;
+int Sub(int x,int y)
+&#123;
+    return x-y;
+&#125;
+int Mul(int x,int y)
+&#123;
+    return x*y;
+&#125;
+int Div(int x,int y)
+&#123;
+    return x/y;
+&#125;
+
+int main()
+&#123;
+    //指针数组
+    int* arr[5];
+    //需要一个数组可以存放四个函数的地址 - 函数指针的数组
+    //int (*pa)(int,int) = Add;//Sub/Mul/Div
+    int (*parr[4])(int,int) = &#123;Add,Sub,Mul,Div&#125;;//函数指针的数组
+    int i = 0;
+    for (i=0;i&lt;4;i++)
+    &#123;
+        printf(&quot;%d\n&quot;,parr[i](2,3));
+    &#125;
+
+    return 0;
+&#125;
+</code></pre>
+<h3 id="函数指针数组的用途：转移表"><a href="#函数指针数组的用途：转移表" class="headerlink" title="函数指针数组的用途：转移表"></a>函数指针数组的用途：转移表</h3><pre><code class="lang-c">void menu()
+&#123;
+    printf(&quot;*****************\n&quot;);
+    printf(&quot;** 1.add  2.sub**\n&quot;);
+    printf(&quot;** 3.mul  4.div**\n&quot;);
+    printf(&quot;** 5.Xor  0.exit**\n&quot;);
+    printf(&quot;*****************\n&quot;);
+&#125;
+
+int Add(int x,int y)
+&#123;
+    return x+y;
+&#125;
+int Sub(int x,int y)
+&#123;
+    return x-y;
+&#125;
+int Mul(int x,int y)
+&#123;
+    return x*y;
+&#125;
+int Div(int x,int y)
+&#123;
+    return x/y;
+&#125;
+int Xor(int x,int y)
+&#123;
+    return x^y;
+&#125;
+
+int main()
+&#123;
+    int input = 0;
+    int x = 0;
+    int y = 0;
+    //转移表
+    int (*pfArr[])(int,int)=&#123;0,Add,Sub,Mul,Div,Xor&#125;;
+    do
+    &#123;
+        menu();
+        printf(&quot;请选择:&gt;&quot;);
+        scanf(&quot;%d&quot;,&amp;input);
+        if(input &gt;= 1 &amp;&amp; input &lt;=5)
+        &#123;
+            printf(&quot;请输入两个操作数:&gt;&quot;);
+            scanf(&quot;%d%d&quot;,&amp;x,&amp;y);
+            int ret = pfArr[input](x,y);
+            printf(&quot;%d\n&quot;,ret);
+        &#125;
+        else if(input == 0)
+        &#123;
+            printf(&quot;退出\n&quot;);
+        &#125;
+        else
+        &#123;
+            printf(&quot;选择错误\n&quot;);
+        &#125;
+    &#125;while(input);
+    return 0;
+&#125;
+</code></pre>
+<h3 id="回调函数"><a href="#回调函数" class="headerlink" title="回调函数"></a>回调函数</h3><pre><code class="lang-c">void Calc(int (*pf)(int,int))
+&#123;
+    int x = 0;
+    int y = 0;
+    printf(&quot;请输入两个操作数:&gt;&quot;);
+    scanf(&quot;%d%d&quot;,&amp;x,&amp;y);
+    printf(&quot;%d\n&quot;,pf(x,y));
+&#125;
+
+int main()
+&#123;
+    int input = 0;
+
+    do
+    &#123;
+        menu();
+        printf(&quot;请选择:&gt;&quot;);
+        scanf(&quot;%d&quot;,&amp;input);
+
+        switch (input)
+        &#123;
+            case 1:
+                Calc(Add);
+                break;
+            case 2:
+                Calc(Sub);
+                break;
+            case 3:
+                Calc(Mul);
+                break;
+            case 4:
+                Calc(Div);
+                break;
+            case 0:
+                printf(&quot;退出\n&quot;);
+                break;
+            default:
+                printf(&quot;选择错误\n&quot;);
+                break;
+        &#125;
+
+    &#125;while(input);
+    return 0;
+&#125;
+
+
+
+//回调函数2
+void print(char* str)
+&#123;
+    printf(&quot;hehe:%s&quot;,str);
+&#125;
+
+void test( void(*p)(char*) )
+&#123;
+    printf(&quot;test\n&quot;);
+    p(&quot;bit&quot;);
+&#125;
+int main()
+&#123;
+    test(print);
+
+    return 0;
+&#125;
+</code></pre>
+<h3 id="指向函数指针数组的指针"><a href="#指向函数指针数组的指针" class="headerlink" title="指向函数指针数组的指针"></a>指向函数指针数组的指针</h3><pre><code class="lang-c">int Add(int x,int y)
+&#123;
+    return x+y;
+&#125;
+
+int main()
+&#123;
+    int arr[10]=&#123;0&#125;;
+    int (*p)[10]=&amp;arr;//取出数组的地址
+    int (*pfArr[4])(int,int);//pfArr是一个数组-函数指针数组
+    //ppfArr是一个指向[函数指针数组]的指针 
+    int (*(*ppfArr)[4])(int,int) = &amp;pfArr;
+    //
+    //ppfArr是一个数组指针，指针指向的数组有四个元素
+    //指向的数组的每个元素的类型是一个函数指针int(*)(int,int)
+    //
+    return 0;
+&#125;
+</code></pre>
+<h3 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h3><pre><code class="lang-c">void bubble_sort(int arr[],int sz) //整形的冒泡排序
+&#123;
+    int i = 0;
+    for (i=0;i&lt;sz-1;i++)
+    &#123;
+        int j=0;
+        for (j=0;j&lt;sz-1-i;j++)
+        &#123;
+            if (arr[j]&gt;arr[j+1])
+            &#123;
+                int tmp = arr[j];
+                arr[j] = arr[j+1];
+                arr[j+1] = tmp;
+            &#125;
+        &#125;
+    &#125;
+&#125;
+
+// void qsort(void *base, size_t nmemb, size_t size,
+//            int (*compar)(const void *a, const void *b));
+//base：指向待排序数组的第一个元素的指针。
+//nmemb：数组中元素的数量。sz
+//size：每个元素的大小（以字节为单位）。width
+//compar：用于比较两个元素的函数指针,比较两个元素的所用函数的地址-这个函数使用者自己实现函数指针的两个参数是：带比较的两个元素的地址。
+
+int cmp_int(const void* a,const void* b)
+&#123;
+    //比较两个整形值
+    return (*(int*)a - *(int*)b);;
+&#125;
+
+void test1()
+&#123;
+    int arr[10]=&#123;9,8,7,6,5,4,3,2,1,0&#125;;
+    int sz = sizeof(arr) / sizeof(arr[0]);
+    qsort(arr,sz,sizeof(arr[0]),cmp_int);
+    int i = 0;
+    for (i=0;i&lt;sz;i++)
+    &#123;
+        printf(&quot;%d &quot;,arr[i]);
+    &#125;
+&#125;
+
+int cmp_float(const void*a,const void* b)
+&#123;
+    return *(float*)a - *(float*)b;
+&#125;
+
+void test2()
+&#123;
+    float f[]=&#123;9.0,8.0,7.0,6.0,5.0,4.0,3.0&#125;;
+    int sz = sizeof(f) / sizeof(f[0]);
+    qsort(f,sz,sizeof(f[0]),cmp_float);
+    int j = 0;
+    for (j=0;j&lt;sz;j++)
+    &#123;
+        printf(&quot;%f &quot;,f[j]);
+    &#125;
+&#125;
+
+struct Stu
+&#123;
+   char name[20];
+   int age;
+&#125;;
+
+int cmp_stu_by_age(const void* a,const void* b)
+&#123;
+    return ((struct Stu*)a)-&gt;age - ((struct Stu*)b)-&gt;age;
+&#125;
+
+int cmp_stu_by_name(const void* a,const void* b)
+&#123;
+    //比较字符串用strcmp
+    return strcmp(((struct Stu*)a)-&gt;name,((struct Stu*)b)-&gt;name);
+&#125;
+
+void test3()
+&#123;
+    struct Stu s[3]=&#123;&#123;"zhangsan",20&#125;,&#123;"lisi",30&#125;,&#123;"wangwu",10&#125;&#125;;
+    int sz = sizeof(s) / sizeof(s[0]);
+    //qsort(s,sz,sizeof(s[0]),cmp_stu_by_age);
+    qsort(s,sz,sizeof(s[0]),cmp_stu_by_name);
+    int k = 0;
+    for (k=0;k&lt;sz;k++)
+    &#123;
+        printf(&quot;%d &quot; ,s[k].age);
+        //printf(&quot;%s &quot; ,s[k].name);
+    &#125;
+&#125;
+
+// 实现bubble_sort函数的程序员，他是否知道未来排序的数据类型-不知道
+// 那程序员也不知道，带比较的两个元素的类型
+
+void Swap(char* buf1,char* buf2,int width)
+&#123;
+    int i = 0;
+    for(i=0;i&lt;width;i++)
+    &#123;
+        char tmp = *buf1;
+        *buf1 = *buf2;
+        *buf2 = tmp;
+        buf1++;
+        buf2++;
+    &#125;
+&#125;
+
+void bubble_sort(void* base,int sz,int width,int(*cmp)(void*a,void*b))
+&#123;
+    int i = 0;
+    //趟数
+    for (i=0;i&lt;sz-1;i++)
+    &#123;
+        //每一趟比较的对数
+        int j = 0;
+        for(j=0;j&lt;sz-1-i;j++)
+        &#123;
+            //两个元素比较
+            if(cmp((char*)base+j*width,(char*)base+(j+1)*width)&gt;0)
+            &#123;
+                //交换
+                Swap((char*)base+j*width,(char*)base+(j+1)*width,width);
+            &#125;
+        &#125;
+    &#125;
+&#125;
+
+void test4()
+&#123;
+    int arr[10]=&#123;9,8,7,6,5,4,3,2,1,0&#125;;
+    int sz = sizeof(arr) / sizeof(arr[0]);
+    //使用bubble_sort的程序员一定知道自己排序的是什么数据、
+    //就应该知道如何比较待排序数组中的元素
+    bubble_sort(arr,sz,sizeof(arr[0]),cmp_int);
+    int i = 0;
+    for (i=0;i&lt;sz;i++)
+    &#123;
+        printf(&quot;%d &quot;,arr[i]);
+    &#125;
+&#125;
+
+void test5()
+&#123;
+    struct Stu s[3]=&#123;&#123;"zhangsan",20&#125;,&#123;"lisi",30&#125;,&#123;"wangwu",10&#125;&#125;;
+    int sz = sizeof(s) / sizeof(s[0]);
+    bubble_sort(s,sz,sizeof(s[0]),cmp_stu_by_age);
+    int k = 0;
+    for (k=0;k&lt;sz;k++)
+    &#123;
+        printf(&quot;%d &quot; ,s[k].age);
+        //printf(&quot;%s &quot; ,s[k].name);
+    &#125;
+&#125;
+
+int main()
+&#123;
+    //test1();
+    //test2();
+    //test3();
+    //test4();
+    test5();
+    return 0;
+&#125;
+</code></pre>
+<h3 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h3><pre><code class="lang-c">int main()
+&#123;
+    //数组名是首元素的地址
+    //1.sizeof(数组名) - 数组名表示首元素地址
+    //2.&amp;数组名 - 数组名表示整个数组
+    //一维数组
+    int a[] = &#123;1,2,3,4&#125;;//4*4=16
+    printf(&quot;%d\n&quot;,sizeof(a));//16-sizeof(数组名)-计算的是数组总大小-单位是字节
+    printf(&quot;%d\n&quot;,sizeof(a+0));//数组名这里表示首元素地址，a+0还是首元素地址，地址大小就是4/8个字节
+    printf(&quot;%d\n&quot;,sizeof(*a));//4-数字名表示首元素地址，*a就是首元素，sizeof(*a)就是4
+    printf(&quot;%d\n&quot;,sizeof(a+1));//a+1第二个元素地址，地址大小为4/8
+    printf(&quot;%d\n&quot;,sizeof(a[1]));//4-第二个元素的大小
+    printf(&quot;%d\n&quot;,sizeof(&amp;a));//&amp;a取出的是数组的地址，数组的地址也是地址，地址大小为4/8
+    printf(&quot;%d\n&quot;,sizeof(*&amp;a));//16 - &amp;a是取数组的地址，数组的地址解引用访问的数组，sizeof计算的就是数组的大小单位是字节
+    printf(&quot;%d\n&quot;,sizeof(&amp;a+1));//&amp;a是数组的地址，&amp;a+1虽然地址跳过整个数组，但还是地址，所以是4/8
+    printf(&quot;%d\n&quot;,sizeof(&amp;a[0]));//&amp;a[0]是第一个元素的地址
+    printf(&quot;%d\n&quot;,sizeof(&amp;a[0]+1));//&amp;a[0]+1是第二个元素的地址
+
+    //字符数组
+    char arr[] = &#123;&#39;a&#39;,&#39;b&#39;,&#39;c&#39;,&#39;d&#39;,&#39;e&#39;,&#39;f&#39;&#125;;
+    printf(&quot;%d\n&quot;,sizeof(arr));//sizeof计算的是数组大小，6*1=6字节
+    printf(&quot;%d\n&quot;,sizeof(arr+0));//arr是首元素的地址，arr+0还是首元素的地址 地址的大小4/8
+    printf(&quot;%d\n&quot;,sizeof(*arr));//1  arr是首元素地址 *arr就是首元素 首元素是字符大小是一个字节
+    printf(&quot;%d\n&quot;,sizeof(arr[1]));//1
+    printf(&quot;%d\n&quot;,sizeof(&amp;arr));//&amp;arr 虽然是数组的地址，但还是地址，地址大小4/8
+    printf(&quot;%d\n&quot;,sizeof(&amp;arr+1));//&amp;arr+1 是跳过整个数组的地址，地址大小4/8
+    printf(&quot;%d\n&quot;,sizeof(&amp;arr[0]+1));//第二个元素的地址，地址大小4/8
+
+    printf(&quot;%d\n&quot;,strlen(arr));//随机值1
+    printf(&quot;%d\n&quot;,strlen(arr+0));//随机值1
+    // printf(&quot;%d\n&quot;,strlen(*arr));//err
+    // printf(&quot;%d\n&quot;,strlen(arr[1]));//err
+    // printf(&quot;%d\n&quot;,strlen(&amp;arr));//随机值1
+    // printf(&quot;%d\n&quot;,strlen(&amp;arr+1));//随机值2 -6
+    // printf(&quot;%d\n&quot;,strlen(&amp;arr[0]+1));//随机值3 -1
+
+    return 0;
+&#125;
+</code></pre>
+]]></content>
+  </entry>
+  <entry>
+    <title>结构体</title>
+    <url>/2023/09/19/Struct/</url>
+    <content><![CDATA[<h1 id="结构体"><a href="#结构体" class="headerlink" title="结构体"></a>结构体</h1><h2 id="头文件"><a href="#头文件" class="headerlink" title="头文件"></a>头文件</h2><pre><code class="lang-c">#include&lt;stdio.h&gt;
+#include&lt;stddef.h&gt;
+</code></pre>
+<h3 id="声明结构体"><a href="#声明结构体" class="headerlink" title="声明结构体"></a>声明结构体</h3><pre><code class="lang-c">//声明一个学生类型，是想过学生类型来创建学生变量
+//描述学生：属性-名字+电话+性别+年龄
+struct Stu
+&#123;
+    char name[20];
+    char tele[12];
+    char sex[20];
+    int age;
+&#125;s4,s5,s6;
+
+struct Stu s3;//全局变量
+
+int main()
+&#123;
+    //创建的结构体变量
+    struct Stu s1;
+    struct Stu s2;
+
+    return 0;
+&#125;
+</code></pre>
+<h3 id="匿名结构体类型"><a href="#匿名结构体类型" class="headerlink" title="匿名结构体类型"></a>匿名结构体类型</h3><pre><code class="lang-c">struct
+&#123;
+    int a;
+    char c;
+&#125;sa;
+
+struct
+&#123;
+    int a;
+    char c;
+&#125;*psa;
+
+int main()
+&#123;
+    psa=&amp;sa;//非法的
+
+    return 0;
+&#125;
+</code></pre>
+<h3 id="结构体的自引用"><a href="#结构体的自引用" class="headerlink" title="结构体的自引用"></a>结构体的自引用</h3><pre><code class="lang-c">struct Node
+&#123;
+    int date;
+    struct Node* next;
+&#125;;
+
+int main()
+&#123;
+    return 0;
+&#125;
+
+typedef struct Node
+&#123;
+    int date;//4
+    struct Node* next;//4/8
+&#125;Node;
+
+int main()
+&#123;
+    struct Node n1;
+    Node n2;
+
+    return 0;
+&#125;
+</code></pre>
+<h3 id="结构体的初始化"><a href="#结构体的初始化" class="headerlink" title="结构体的初始化"></a>结构体的初始化</h3><pre><code class="lang-c">struct T
+&#123;
+    double weight;
+    short age;
+&#125;;
+
+struct S
+&#123;
+    char c;
+    struct T st;
+    int a;
+    double d;
+    char arr[20];
+&#125;;
+
+int main()
+&#123;
+    struct S s = &#123;&#39;c&#39;,&#123;55.6,30&#125;,100,3.14,&quot;hello bit&quot;&#125;;
+    printf(&quot;%c %lf %d %d %lf %s\n&quot;,s.c,s.st.weight,s.st.age,s.a,s.d,s.arr);
+
+    return 0;
+&#125;
+</code></pre>
+<h3 id="结构体内存对齐"><a href="#结构体内存对齐" class="headerlink" title="结构体内存对齐"></a>结构体内存对齐</h3><pre><code class="lang-c">struct S1
+&#123;
+    char c1;
+    int a;
+    char c2;
+&#125;;
+
+struct S2
+&#123;
+    char c1;
+    char c2;
+    int a;
+&#125;;
+
+struct S3
+&#123;
+    double d;
+    char c;
+    int i;
+&#125;;
+
+struct S4
+&#123;
+    char c1;
+    struct S3 s3;
+    double d;
+&#125;;
+
+int main()
+&#123;
+    struct S1 s1 = &#123;0&#125;;
+    printf(&quot;%d\n&quot;,sizeof(s1));
+    struct S2 s2 = &#123;0&#125;;
+    printf(&quot;%d\n&quot;,sizeof(s2));
+    struct S3 s3 = &#123;0&#125;;
+    printf(&quot;%d\n&quot;,sizeof(s3));
+    struct S4 s4 = &#123;0&#125;;
+    printf(&quot;%d\n&quot;,sizeof(s4));
+    return 0;
+&#125;
+
+#pragma pack(4)  //设置默认对齐数为4
+struct S
+&#123;
+    char c1;
+    double d;
+&#125;;
+#pragma pack()  //取消默认对齐数
+
+int main()
+&#123;
+    struct S s;
+    printf(&quot;%d\n&quot;,sizeof(s));
+    return 0;
+
+&#125;
+</code></pre>
+<h3 id="写一个宏，计算结构体中某变量相对于首地址的偏移-offsetof-宏的实现、"><a href="#写一个宏，计算结构体中某变量相对于首地址的偏移-offsetof-宏的实现、" class="headerlink" title="写一个宏，计算结构体中某变量相对于首地址的偏移  offsetof()宏的实现、"></a>写一个宏，计算结构体中某变量相对于首地址的偏移  offsetof()宏的实现、</h3><pre><code class="lang-c">struct S
+&#123;
+    char c;
+    int i;
+    double d;
+
+&#125;;
+
+
+int main()
+&#123;
+    //offsetof();
+    printf(&quot;%d\n&quot;,offsetof(struct S,c));
+    printf(&quot;%d\n&quot;,offsetof(struct S,i));
+    printf(&quot;%d\n&quot;,offsetof(struct S,d));
+    return 0;
+&#125;
+</code></pre>
+<h3 id="结构体传参"><a href="#结构体传参" class="headerlink" title="结构体传参"></a>结构体传参</h3><pre><code class="lang-c">struct S
+&#123;
+    int a;
+    char c;
+    double d;
+&#125;;
+
+void Init(struct S* ps)
+&#123;
+    ps-&gt;a = 100;
+    ps-&gt;c = &#39;w&#39;;
+    ps-&gt;d = 3.14;
+&#125;
+//传值
+Print1(struct S tmp)
+&#123;
+    printf(&quot;%d %c %lf\n&quot;,tmp.a,tmp.c,tmp.d);
+&#125;
+//传址(推荐)
+Print2(const struct S* ps)
+&#123;
+    printf(&quot;%d %c %lf\n&quot;,ps-&gt;a,ps-&gt;c,ps-&gt;d);
+&#125;
+
+int main()
+&#123;
+    struct S s = &#123;0&#125;;
+    Init(&amp;s);
+    Print1(s);
+    Print2(&amp;s);
+    /*s.a = 100;
+    s.c = &#39;w&#39;;
+    s.d = 3.14;
+
+    printf(&quot;%d\n&quot;,s.a);*/
+    return 0;
+&#125;
+</code></pre>
+<h3 id="位段-二进制位-为了节省空间"><a href="#位段-二进制位-为了节省空间" class="headerlink" title="位段 - 二进制位  为了节省空间"></a>位段 - 二进制位  为了节省空间</h3><pre><code class="lang-c">struct S
+&#123;
+    int a:2;
+    int b:5;
+    int c:10;
+    int d:30;
+    //后面数字不能大于32
+&#125;;
+//47bit - 6个字节*8 = 48bit
+int main()
+&#123;
+    struct S s;
+    printf(&quot;%d\n&quot;,sizeof(s));//8个字节
+    return 0;
+&#125;
+</code></pre>
+<h3 id="位段的内存分配"><a href="#位段的内存分配" class="headerlink" title="位段的内存分配"></a>位段的内存分配</h3><pre><code class="lang-c">struct S
+&#123;
+    char a:3;
+    char b:4;
+    char c:5;
+    char d:4;
+&#125;;
+
+int main()
+&#123;
+    struct S s=&#123;0&#125;;
+
+    s.a = 10;
+    s.b = 20;
+    s.c = 3;
+    s.d = 4;
+    return 0;
+&#125;
+</code></pre>
+]]></content>
+  </entry>
+  <entry>
+    <title>动态内存分配</title>
+    <url>/2023/09/19/dynamic%20memory/</url>
+    <content><![CDATA[<h1 id="动态内存分配"><a href="#动态内存分配" class="headerlink" title="动态内存分配"></a>动态内存分配</h1><h2 id="头文件"><a href="#头文件" class="headerlink" title="头文件"></a>头文件</h2><pre><code class="lang-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;errno.h&gt;
+#include &lt;windows.h&gt;
+</code></pre>
+<h3 id="malloc"><a href="#malloc" class="headerlink" title="malloc"></a>malloc</h3><pre><code class="lang-c">int main()
+&#123;
+    //像内存申请10个整形的空间
+    int* p =(int*)malloc(10*sizeof(int));//malloc不初始化为零
+
+    if(p==NULL)
+    &#123;
+        //打印错误的一个方式
+        printf(&quot;%s\n&quot;,strerror(errno));
+    &#125;
+    else
+    &#123;
+        //正常使用空间
+        int i = 0;
+        for(i=0;i&lt;10;i++)
+        &#123;
+            *(p+i)=i;
+        &#125;
+        for(i=0;i&lt;10;i++)
+        &#123;
+            printf(&quot;%d &quot;,*(p+i));
+        &#125;
+    &#125;
+    //当动态申请的空间不在用的时候，就应该还给操作系统
+    free(p);
+    p = NULL;
+    return 0;
+&#125;
+</code></pre>
+<h3 id="calloc"><a href="#calloc" class="headerlink" title="calloc"></a>calloc</h3><pre><code class="lang-c">int main()
+&#123;
+    int* p=(int*)calloc(10,sizeof(int));//calloc初始化为零
+
+    if(p==NULL)
+    &#123;
+        printf(&quot;%s\n&quot;,strerror(errno));
+    &#125;
+    else
+    &#123;
+        int i = 0;
+        for(i=0;i&lt;10;i++)
+        &#123;
+            printf(&quot;%d &quot;,*(p+i));
+        &#125;
+    &#125;
+    free(p);
+    p = NULL;
+    return 0;
+&#125;
+</code></pre>
+<h3 id="realloc"><a href="#realloc" class="headerlink" title="realloc"></a>realloc</h3><pre><code class="lang-c">int main()
+&#123;
+    int* p = (int*)malloc(20);
+    if(p==NULL)
+    &#123;
+        printf(&quot;%s\n&quot;,strerror(errno));
+    &#125;
+    else
+    &#123;
+        int i = 0;
+        for(i=0;i&lt;5;i++)
+        &#123;
+            *(p+i) = i;
+        &#125;
+    &#125;
+    //就是在使用malloc开辟的20个字节空间
+    //假设这里，20个字节不能满足我们使用
+    //希望有40个字节的空间
+    //这里用realloc开辟
+    //realloc使用注意事项
+    //1.原有空间后有足够的空间，原空间数据不发生变化
+    //2.没有足够空间，在堆空间上另找一个合适大小的连续空间来使用。这样函数返回的是一个新地址。
+    int* p2 = realloc(p,40);
+    int i = 0;
+    for(i=5;i&lt;10;i++)
+    &#123;
+        *(p+i) = i;
+    &#125;
+    for(i=0;i&lt;10;i++)
+    &#123;
+        printf(&quot;%d &quot;,*(p2+i));
+    &#125;
+    free(p);
+    p = NULL;
+    return 0;
+&#125;
+</code></pre>
+<h3 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h3><pre><code class="lang-c">int mian()
+&#123;
+    //1.对空指针进行解引用操作
+    int* p = (int*)malloc(40);
+    //万一malloc失败了，p被赋值为NULL
+    //*p = 0;//err
+
+    int i = 0;
+    for(i=0;i&lt;10;i++)
+    &#123;
+        *(p+i) = i;//err
+    &#125;
+    free(p); 
+    p = NULL;
+
+    //2.对动态开辟的内存的越界访问
+    int *p = (int*)malloc(5*sizeof(int));
+    if(p == NULL)
+    &#123;
+        return 0;
+    &#125;
+    else
+    &#123;
+        int i = 0;
+        for(i=0;i&lt;10;i++)
+        &#123;
+            *(p+i) = i;
+        &#125;
+    &#125;
+    free(p);
+    p = NULL;
+
+    //3.对动态开辟内存的free
+    int a = 10; 
+    int* p = &amp;a;
+    *p = 20;
+    free(p);
+    p = NULL;
+
+    int *p = (int*)malloc(40);
+    if(p == NULL)
+    &#123;
+        return 0;
+    &#125;
+    // //使用
+    int *p2 = realloc(p,80);
+    if(p2 != NULL)
+    &#123;
+        p = p2;
+    &#125;
+
+    int *p = realloc(NULL,40);//malloc(40)
+
+    //4.使用free释放动态开辟内存的一部分
+    int *p = (int*)malloc(40);
+    if(p == NULL)
+    &#123;
+        return 0;
+    &#125;
+    int i = 0;
+    for(i=0;i&lt;10;i++)
+    &#123;
+        *p++ = i;
+    &#125;
+    //回收空间
+    free(p);
+    p = NULL;
+
+    //5.对同一块动态内存的多次释放
+    int *p = (int*)malloc(40);
+    if(p == NULL)
+    &#123;
+        return 0;
+    &#125;
+    //使用
+    //释放
+    free(p);
+    p = NULL;//避免二次free
+    //...
+    free(p);
+
+    //6.动态开辟内存忘记释放(内存泄漏)
+    while(1)
+    &#123;
+        malloc(1);
+    &#125;
+    return 0;
+&#125;
+</code></pre>
+]]></content>
+  </entry>
+  <entry>
+    <title>加密通信</title>
+    <url>/2023/09/19/encrypted%20communication/</url>
+    <content><![CDATA[<h1 id="加密通信"><a href="#加密通信" class="headerlink" title="加密通信"></a>加密通信</h1><h3 id="服务端："><a href="#服务端：" class="headerlink" title="服务端："></a>服务端：</h3><pre><code class="lang-python"># 导入 socket 模块
+import socket
+
+# 定义异或加密函数，输入明文和密钥，返回加密后的密文
+def xor_encrypt(plaintext, key):
+    # 将明文和密钥转换为二进制
+    plaintext = plaintext.encode()
+    key = key.encode()
+
+    # 创建一个空的字节数组，用于存储加密后的数据。
+    ciphertext = bytearray()
+
+    # 使用异或加密
+    for i in range(len(plaintext)):
+        byte = plaintext[i] ^ key[i % len(key)]
+        ciphertext.append(byte)
+
+    return bytes(ciphertext)
+
+# 定义服务器的 IP 地址和端口号
+ip = &quot;10.22.223.121&quot;
+port = 25000
+
+# 创建一个 TCP/IP 套接字并绑定到指定的端口号
+serve = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+serve.bind((ip, port))
+
+# 开始监听连接请求
+serve.listen()
+
+while True:
+    # 接受客户端连接，并返回连接对象与地址信息
+    conn, address = serve.accept()
+
+    while True:
+        try:
+            # 接收客户端发送的数据并解密
+            encrypted_data = conn.recv(255)
+            if not encrypted_data:
+                # 如果没有接收到数据，则跳出循环
+                break
+
+            data = xor_encrypt(encrypted_data.decode(), &quot;Fe!EdoWmh^w=U43SO*-#7CZyLRJHjAds&quot;).decode()
+            print(data)
+
+            # 加密并发送数据
+            input_str = input(&quot;请输入要发送的字符串：&quot;)
+            if not input_str:
+                # 如果没有输入数据，则跳出循环
+                break
+
+            encrypted_input = xor_encrypt(input_str, &quot;Fe!EdoWmh^w=U43SO*-#7CZyLRJHjAds&quot;)
+            conn.send(encrypted_input)
+
+        except ConnectionResetError:
+            # 如果连接重置，则关闭连接并跳出循环
+            conn.close()
+            break
+
+    # 关闭连接
+    conn.close()
+</code></pre>
+<h3 id="客户端"><a href="#客户端" class="headerlink" title="客户端:"></a>客户端:</h3><pre><code class="lang-python"># 导入 socket 模块
+import socket
+
+# 定义异或加密函数，输入明文和密钥，返回加密后的密文
+def xor_encrypt(plaintext, key):
+    # 将明文和密钥转换为二进制
+    plaintext = plaintext.encode()
+    key = key.encode()
+
+    # 创建一个空的字节数组，用于存储加密后的数据。
+    ciphertext = bytearray()
+
+    # 使用异或加密
+    for i in range(len(plaintext)):
+        byte = plaintext[i] ^ key[i % len(key)]
+        ciphertext.append(byte)
+
+    return bytes(ciphertext)
+
+# 定义服务器的 IP 地址和端口号
+ip = &quot;10.22.223.121&quot;
+port = 25000
+
+# 创建一个 TCP/IP 套接字并连接到指定的地址和端口号
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client.connect((ip, port))
+
+while True:
+    try:
+        # 加密并发送数据
+        input_str = input(&quot;请输入要发送的字符串：&quot;)
+        if not input_str:
+            # 如果没有输入数据，则跳出循环
+            break
+
+        encrypted_input = xor_encrypt(input_str, &quot;Fe!EdoWmh^w=U43SO*-#7CZyLRJHjAds&quot;)
+        client.send(encrypted_input)
+
+        # 接收服务器返回的数据并解密
+        encrypted_data = client.recv(255)
+        if not encrypted_data:
+            # 如果没有接收到数据，则跳出循环
+            break
+
+        data = xor_encrypt(encrypted_data.decode(), &quot;Fe!EdoWmh^w=U43SO*-#7CZyLRJHjAds&quot;).decode()
+        print(data)
+
+    except ConnectionResetError:
+        # 如果连接重置，则关闭连接并跳出循环
+        client.close()
+        break
+
+# 关闭连接
+client.close()
+</code></pre>
+<p>这里所用的加密方式只是简单的异或加密，实际中所用的加密函数要比其复杂的多的多的多得多。</p>
+<h3 id="结果展示："><a href="#结果展示：" class="headerlink" title="结果展示："></a>结果展示：</h3><p>服务端开启服务，客户端连接。</p>
+<p><img src="https://images.cnblogs.com/cnblogs_com/blogs/799118/galleries/2334136/o_230915105351_image.png" alt="alt 属性文本"></p>
+<p>客户端发送hello，服务端接收：</p>
+<p><img src="https://images.cnblogs.com/cnblogs_com/blogs/799118/galleries/2334136/o_230915105401_image.png" alt="alt 属性文本"></p>
+<p>服务端回复:hi，客户端收到：</p>
+<p><img src="https://images.cnblogs.com/cnblogs_com/blogs/799118/galleries/2334136/o_230915105410_image.png" alt="alt 属性文本"></p>
+<p>最终功能展示：</p>
+<p><img src="https://images.cnblogs.com/cnblogs_com/blogs/799118/galleries/2334136/o_230915105418_image.png" alt="alt 属性文本"></p>
+]]></content>
+  </entry>
+  <entry>
     <title>Hello World</title>
     <url>/2023/09/17/hello-world/</url>
     <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
@@ -19,7 +1223,58 @@
 ]]></content>
   </entry>
   <entry>
-    <title></title>
+    <title>永恒之蓝漏洞的利用</title>
+    <url>/2023/09/19/msf17-010/</url>
+    <content><![CDATA[<h1 id="永恒之蓝漏洞的利用"><a href="#永恒之蓝漏洞的利用" class="headerlink" title="永恒之蓝漏洞的利用"></a>永恒之蓝漏洞的利用</h1><h3 id="一、实验前准备"><a href="#一、实验前准备" class="headerlink" title="一、实验前准备"></a>一、实验前准备</h3><p>  首先关闭win7的防火墙，开启445端口，并且攻击机（kali）和靶机（win7）可以互相ping通。</p>
+<blockquote>
+<p><img src="https://images.cnblogs.com/cnblogs_com/blogs/799118/galleries/2334136/o_230915065207_image.png" alt="alt 属性文本"><br><img src="https://images.cnblogs.com/cnblogs_com/blogs/799118/galleries/2334136/o_230915065326_image.png" alt="alt 属性文本"><br><img src="https://images.cnblogs.com/cnblogs_com/blogs/799118/galleries/2334136/o_230915065515_image.png" alt="alt 属性文本"></p>
+<h3 id="二、实验过程"><a href="#二、实验过程" class="headerlink" title="二、实验过程"></a>二、实验过程</h3></blockquote>
+<p>使用kali打开msfconsole，使用它先进行win7靶机的445端口扫描，检查其是否打开，然后我们搜索ms17-010模块。</p>
+<blockquote>
+<p><img src="https://images.cnblogs.com/cnblogs_com/blogs/799118/galleries/2334136/o_230915065523_image.png" alt="alt 属性文本"><br><img src="https://images.cnblogs.com/cnblogs_com/blogs/799118/galleries/2334136/o_230915065533_image.png" alt="alt 属性文本"><br><img src="https://images.cnblogs.com/cnblogs_com/blogs/799118/galleries/2334136/o_230915065540_image.png" alt="alt 属性文本"></p>
+</blockquote>
+<p> 这里我们可以得到一些模块，其中auxiliary/scanner/smb/smb_ms17_010 是永恒之蓝扫描模块， exploit/windows/smb/ms17_010_eternalblue 是永恒之蓝攻击模块。一般配合使用，前者先扫描，若显示有漏洞，再进行攻击。</p>
+<blockquote>
+<p><img src="https://images.cnblogs.com/cnblogs_com/blogs/799118/galleries/2334136/o_230915065547_image.png" alt="alt 属性文本"><br><img src="https://images.cnblogs.com/cnblogs_com/blogs/799118/galleries/2334136/o_230915065555_image.png" alt="alt 属性文本"></p>
+</blockquote>
+<p> 这里我们可以看到靶机存在永恒之蓝漏洞，这里我们对其使用攻击模块</p>
+<blockquote>
+<p><img src="https://images.cnblogs.com/cnblogs_com/blogs/799118/galleries/2334136/o_230915065610_image.png" alt="alt 属性文本"></p>
+</blockquote>
+<p> 这里我们需要设置攻击机、靶机的地址和payload。</p>
+<blockquote>
+<p><img src="https://images.cnblogs.com/cnblogs_com/blogs/799118/galleries/2334136/o_230915065620_image.png" alt="alt 属性文本"></p>
+</blockquote>
+<p> 这里可以看到攻击成功了，出现 meterpreter &gt;。</p>
+<blockquote>
+<p><img src="https://images.cnblogs.com/cnblogs_com/blogs/799118/galleries/2334136/o_230915065630_image.png" alt="alt 属性文本"><br><img src="https://images.cnblogs.com/cnblogs_com/blogs/799118/galleries/2334136/o_230915065638_image.png" alt="alt 属性文本"></p>
+</blockquote>
+<p>成功后我们用sysinfo来获取靶机当前浏览屏幕的照片。</p>
+<blockquote>
+<p><img src="https://images.cnblogs.com/cnblogs_com/blogs/799118/galleries/2334136/o_230915065651_image.png" alt="alt 属性文本"></p>
+</blockquote>
+<p>这里我们可以看到获取到靶机的shell权限后我们看到的是乱码，这里我们用chcp 65001这个windows命令来转换编码格式，“65001”这里代表“UTF-8”这种编码方式。转换后就是我们正常看到的命令提示符的界面。<br>    这里再使用net user test 123456 / add 添加一个用户名为test，密码为123456的用户，再将其加入管理员组，方便我们后面的操作。</p>
+<blockquote>
+<p><img src="https://images.cnblogs.com/cnblogs_com/blogs/799118/galleries/2334136/o_230915065659_image.png" alt="alt 属性文本"><br><img src="https://images.cnblogs.com/cnblogs_com/blogs/799118/galleries/2334136/o_230915065709_image.png" alt="alt 属性文本"></p>
+</blockquote>
+<p>这里我们可以看到靶机中已经存在我们在kali上添加的用户test。</p>
+<blockquote>
+<p><img src="https://images.cnblogs.com/cnblogs_com/blogs/799118/galleries/2334136/o_230915065717_image.png" alt="alt 属性文本"><br>  systeminfo查看win7的系统信息<br><img src="https://images.cnblogs.com/cnblogs_com/blogs/799118/galleries/2334136/o_230915065737_image.png" alt="alt 属性文本"><br><img src="https://images.cnblogs.com/cnblogs_com/blogs/799118/galleries/2334136/o_230915065744_image.png" alt="alt 属性文本"><br><img src="https://images.cnblogs.com/cnblogs_com/blogs/799118/galleries/2334136/o_230915065751_image.png" alt="alt 属性文本"></p>
+</blockquote>
+<p>这里在攻击机上下关机命令，相应的靶机上出现关机提示。<br>下达重启命令也是同样的效果。</p>
+<blockquote>
+<p><img src="https://images.cnblogs.com/cnblogs_com/blogs/799118/galleries/2334136/o_230915065800_image.png" alt="alt 属性文本"><br><img src="https://images.cnblogs.com/cnblogs_com/blogs/799118/galleries/2334136/o_230915065805_image.png" alt="alt 属性文本"></p>
+</blockquote>
+<p>最后我们返回kali，命令行输入rdesktop 192.168.175.203进行桌面远程链接。</p>
+<blockquote>
+<p><img src="https://images.cnblogs.com/cnblogs_com/blogs/799118/galleries/2334136/o_230915065813_image.png" alt="alt 属性文本"><br><img src="https://images.cnblogs.com/cnblogs_com/blogs/799118/galleries/2334136/o_230915065820_image.png" alt="alt 属性文本"></p>
+</blockquote>
+<p>远程登录成功。</p>
+<p>不会排版轻喷qwq。。。</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>python基础语法</title>
     <url>/2023/09/19/py/</url>
     <content><![CDATA[<h1 id="python基础语法"><a href="#python基础语法" class="headerlink" title="python基础语法"></a>python基础语法</h1><h3 id="输出函数print"><a href="#输出函数print" class="headerlink" title="输出函数print()"></a>输出函数print()</h3><pre><code class="lang-python">#输出数字
 print (98.5)
