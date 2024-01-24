@@ -2790,4 +2790,374 @@ return 0;
 </code></pre><p>}</p>
 ]]></content>
   </entry>
+  <entry>
+    <title>SQL入门</title>
+    <url>/2024/01/24/SQL/</url>
+    <content><![CDATA[<h1 id="SQL入门"><a href="#SQL入门" class="headerlink" title="SQL入门"></a>SQL入门</h1><h3 id="基础结构"><a href="#基础结构" class="headerlink" title="基础结构"></a>基础结构</h3><pre><code class="lang-sql">primary key (主键) 橙色
+foreign key (外键) 绿色
+</code></pre>
+<p><img src="/img/SQL/基础结构.png" alt=""></p>
+<h3 id="创建资料库"><a href="#创建资料库" class="headerlink" title="创建资料库"></a>创建资料库</h3><pre><code class="lang-sql">CREATE DATABASE `sql_tutorial`;  --创建资料库
+SHOW DATABASES;  --查看资料库
+DROP DATABASE `sql_tutorial`;  --删除资料库
+</code></pre>
+<p><img src="/img/SQL/创建资料库.png" alt=""></p>
+<h3 id="创建表格"><a href="#创建表格" class="headerlink" title="创建表格"></a>创建表格</h3><pre><code class="lang-sql">-- 数据类型
+INT    --整数
+DECIMAL(3,2)    --有小数点的数 2.33
+VARCHAR(10)    --字串
+BLOB    --(Binary Large Object)图片 影片 档案...
+DATE    --&#39;YYYY-MM-DD&#39; 日期 2024-1-21
+TIMESTAMP   --&#39;YYYY-MM-DD HH:MM:SS&#39; 记录时间 2024-1-21 21:50:29
+</code></pre>
+<pre><code class="lang-sql">CREATE TABLE student(               --创建表格
+    `student_id` INT PRIMARY KEY,
+    `name` VARCHAR(20) NOT NULL,
+    `major` VARCHAR(20) UNIQUE
+);
+
+-- CREATE TABLE student(
+--     `student_id` INT,
+--     `name` VARCHAR(20),
+--     `major` VARCHAR(20),
+--     PRIMARY KEY(`student_id`)
+-- );
+
+DESCRIBE `student`;    --绘制表格
+DROP TABLE `student`;   --删除表格
+
+ALTER TABLE `student` ADD gpa DECIMAL(3,2);    --给表格新增gpa属性
+ALTER TABLE `student` DROP COLUMN gpa ;    --删除gpa属性
+</code></pre>
+<p><img src="/img/SQL/创建表格.png" alt=""></p>
+<h3 id="存储资料"><a href="#存储资料" class="headerlink" title="存储资料"></a>存储资料</h3><pre><code class="lang-sql">INSERT INTO `student` VALUE(2, &#39;小黑&#39;,&#39;生物&#39;);    --给表格中插入数据
+
+SELECT * FROM `student`;    --取得表格中的资料
+
+INSERT INTO `student`(`name`,`major`,`student_id`) VALUE(&#39;小蓝&#39;, &#39;英语&#39;,4);        --按给定顺序填写
+
+INSERT INTO `student`(`name`,`major`,`student_id`) VALUE(NULL,&#39;英语&#39;,5);
+--等价于
+INSERT INTO `student`(`major`,`student_id`) VALUE(&#39;英语&#39;,5);
+</code></pre>
+<p><img src="/img/SQL/存储资料.png" alt=""></p>
+<h3 id="constraints-限制-约束"><a href="#constraints-限制-约束" class="headerlink" title="constraints 限制 约束"></a>constraints 限制 约束</h3><pre><code class="lang-sql">CREATE TABLE student(
+    `student_id` INT PRIMARY KEY,
+    `name` VARCHAR(20) NOT NULL,    --限制不为空
+    `major` VARCHAR(20) UNIQUE        --限制不重复
+);
+
+INSERT INTO `student` VALUE(1, NULL, &#39;英语&#39;);
+--INSERT INTO `student` VALUE(3, NULL, &#39;英语&#39;)    Error Code: 1048. Column &#39;name&#39; cannot be null
+
+INSERT INTO `student` VALUE(1, &#39;小白&#39;, &#39;英语&#39;);
+INSERT INTO `student` VALUE(2, &#39;小黑&#39;, &#39;英语&#39;);
+--INSERT INTO `student` VALUE(2, &#39;小黑&#39;, &#39;英语&#39;)    Error Code: 1062. Duplicate entry &#39;英语&#39; for key &#39;student.major&#39;
+</code></pre>
+<pre><code class="lang-sql">CREATE TABLE student(
+    `student_id` INT PRIMARY KEY,
+    `name` VARCHAR(20) NOT NULL,
+    `major` VARCHAR(20) DEFAULT &#39;历史&#39;    --默认值为历史
+);
+INSERT INTO `student`(`name`,`student_id`) VALUE(&#39;小白&#39;,1);
+</code></pre>
+<pre><code class="lang-sql">CREATE TABLE student(
+    `student_id` INT PRIMARY KEY AUTO_INCREMENT,    --自动补全+1
+    `name` VARCHAR(20),
+    `major` VARCHAR(20)
+);
+</code></pre>
+<h3 id="修改、删除资料"><a href="#修改、删除资料" class="headerlink" title="修改、删除资料"></a>修改、删除资料</h3><p>这里我们进行修改资料时选择先设置语句<code>SET SQL_SAFE_UPDATES = 0;</code>以避免不必要的报错。<br><code>SET SQL_SAFE_UPDATES = 0;</code>这个语句用于在<code>MySQL</code>中禁用安全更新模式。当<code>SQL_SAFE_UPDATES</code>设置为<code>1</code>时（这是默认值），某些类型的<code>UPDATE</code>和<code>DELETE</code>语句如果缺少<code>WHERE</code>子句，或者带有一个影响多行的<code>LIMIT</code>子句，将不会被执行。这是一种安全特性，旨在防止意外更新或删除表中的所有行。<br>通过将<code>SQL_SAFE_UPDATES</code>设置为<code>0</code>，实际上是关闭了这个安全特性，允许执行没有<code>WHERE</code>子句或带有影响多行的<code>LIMIT</code>子句的更新和删除。这应该谨慎使用，因为这增加了意外数据修改的风险。<br>在使用<code>SQL_SAFE_UPDATES = 0</code>进行查询之前，建议确保对查询的后果有很好的了解，以避免意外数据丢失。在执行需要此设置的查询后，最好将其恢复为默认值，以确保安全性。<br><img src="/img/SQL/修改资料.png" alt=""></p>
+<pre><code class="lang-sql">--修改表格中 `major` 中的 英语-&gt;英语文学
+UPDATE `student`
+SET `major` = &#39;英语文学&#39;
+WHERE `major` = &#39;英语&#39;;
+--同理
+
+UPDATE `student`
+SET `major` = &#39;生化&#39;
+WHERE `major` = &#39;生物&#39; OR `major` = &#39;化学&#39;;
+
+UPDATE `student`
+SET `name` = &#39;小灰&#39;,`major` = &#39;物理&#39;
+WHERE `student_id` = 1;
+
+UPDATE `student`
+SET `major` = &#39;物理&#39;;
+</code></pre>
+<pre><code class="lang-sql">--删除`student_id` = 4 的一行
+DELETE FROM `student`
+WHERE `student_id` = 4;
+--同理
+DELETE FROM `student`
+WHERE `name` = &#39;小灰&#39; AND `major` = &#39;物理&#39;;
+
+DELETE FROM `student`
+WHERE `score` &lt; 60;        --&lt; &gt; &lt;= &gt;= = &lt;&gt; 
+
+DELETE FROM `student`;    --删除所有资料
+</code></pre>
+<h3 id="取得资料"><a href="#取得资料" class="headerlink" title="取得资料"></a>取得资料</h3><pre><code class="lang-sql">SELECT * FROM `student`;    --取得表格中的资料，* 取得所有属性的资料
+SELECT `name` FROM `student`;    --只会回传`name`属性
+--同理
+SELECT `name`,`major` FROM `student`;
+--根据成绩排序回传资料
+SELECT * FROM `student` ORDER BY `score`;    --默认ASC(由低到高，升序)
+SELECT * FROM `student` ORDER BY `score` DESC;    --DESC(由高到低,降序)
+SELECT * FROM `student` ORDER BY `score`,`student_id`;     --先按`score`再按`student_id`排序
+--只回传前三个资料
+SELECT * FROM `student` LIMIT 3; 
+--同理
+SELECT * FROM `student` ORDER BY `score` LIMIT 2; 
+SELECT * FROM `student` ORDER BY `score` DESC LIMIT 3; 
+--同理
+SELECT * FROM `student` WHERE `major` = &#39;英语&#39; OR `score` &gt; 20; 
+SELECT * FROM `student` WHERE `major` = &#39;英语&#39; OR `score` &lt;&gt; 70 LIMIT 2; 
+
+SELECT * FROM `student` WHERE `major` IN (&#39;英语&#39; ,&#39;历史&#39;,&#39;生物&#39;);
+--相当于
+SELECT * FROM `student` WHERE `major` = &#39;英语&#39; OR `major` = &#39;历史&#39; OR `major` = &#39;生物&#39;;
+</code></pre>
+<h3 id="创建公司资料库表格"><a href="#创建公司资料库表格" class="headerlink" title="创建公司资料库表格"></a>创建公司资料库表格</h3><pre><code class="lang-sql">CREATE DATABASE `sql_tutorial`;
+SHOW DATABASES;
+USE `sql_tutorial`;
+
+CREATE TABLE `employee`(
+    `emp_id` INT PRIMARY KEY,
+    `name` VARCHAR(20),
+    `birth_date` DATE,
+    `sex` VARCHAR(1),
+    `salary` INT,
+    `branch_id` INT,
+    `sup_id` INT
+);
+
+CREATE TABLE `branch`(
+    `branch_id` INT PRIMARY KEY,
+    `branch_name` VARCHAR(20),
+    `manager_id` INT,
+    FOREIGN KEY (`manager_id`) REFERENCES `employee`(`emp_id`) ON DELETE SET NULL
+);
+
+ALTER TABLE `employee`
+ADD FOREIGN KEY(`branch_id`)
+REFERENCES `branch`(`branch_id`)
+ON DELETE SET NULL;
+
+ALTER TABLE `employee`
+ADD FOREIGN KEY(`sup_id`)
+REFERENCES `employee`(`emp_id`)
+ON DELETE SET NULL;
+
+CREATE TABLE `client`(
+    `client_id` INT PRIMARY KEY,
+    `client_name` VARCHAR(20),
+    `phone` VARCHAR(20)
+);
+
+CREATE TABLE `work_with`(
+    `emp_id` INT,
+    `client_id` INT,
+    `total_sales` INT,
+    PRIMARY KEY(`emp_id`,`client_id`),
+    FOREIGN KEY (`emp_id`) REFERENCES `employee`(`emp_id`) ON DELETE CASCADE,
+    FOREIGN KEY (`client_id`) REFERENCES `client`(`client_id`) ON DELETE CASCADE
+);
+</code></pre>
+<h3 id="新增公司资料"><a href="#新增公司资料" class="headerlink" title="新增公司资料"></a>新增公司资料</h3><pre><code class="lang-sql">INSERT INTO `branch` VALUE(1, &#39;研发&#39;,NULL);
+INSERT INTO `branch` VALUE(2, &#39;行政&#39;,NULL);
+INSERT INTO `branch` VALUE(3, &#39;资讯&#39;,NULL);
+
+INSERT INTO `employee` VALUES(206, &#39;小黄&#39;, &#39;1998-10-08&#39;,&#39;F&#39;,50000,1,NULL);
+INSERT INTO `employee` VALUES(207, &#39;小绿&#39;, &#39;1985-09-16&#39;,&#39;M&#39;,29000,2,206);
+INSERT INTO `employee` VALUES(208, &#39;小黑&#39;, &#39;2000-12-19&#39;,&#39;M&#39;,35000,3,206);
+INSERT INTO `employee` VALUES(209, &#39;小白&#39;, &#39;1997-01-22&#39;,&#39;F&#39;,39000,3,207);
+INSERT INTO `employee` VALUES(210, &#39;小蓝&#39;, &#39;1925-11-10&#39;,&#39;F&#39;,84000,1,207);
+
+UPDATE `branch`
+SET `manager_id` = 206
+WHERE `branch_id` = 1;
+UPDATE `branch`
+SET `manager_id` = 207
+WHERE `branch_id` = 2;
+UPDATE `branch`
+SET `manager_id` = 208
+WHERE `branch_id` = 3;
+
+INSERT INTO `client` VALUES(400,&#39;阿狗&#39;,&#39;254354335&#39;);
+INSERT INTO `client` VALUES(401,&#39;阿猫&#39;,&#39;25633899&#39;);
+INSERT INTO `client` VALUES(402,&#39;旺来&#39;,&#39;45354345&#39;);
+INSERT INTO `client` VALUES(403,&#39;露西&#39;,&#39;54354365&#39;);
+INSERT INTO `client` VALUES(404,&#39;艾瑞克&#39;,&#39;18783783&#39;);
+
+INSERT INTO `work_with` VALUES(206,400,&#39;70000&#39;);
+INSERT INTO `work_with` VALUES(207,401,&#39;24000&#39;);
+INSERT INTO `work_with` VALUES(208,402,&#39;9800&#39;);
+INSERT INTO `work_with` VALUES(208,403,&#39;24000&#39;);
+INSERT INTO `work_with` VALUES(210,404,&#39;87940&#39;);
+</code></pre>
+<p>以上所有代码运行结果：<br><img src="/img/SQL/基础结构.png" alt=""></p>
+<h3 id="取得公司资料"><a href="#取得公司资料" class="headerlink" title="取得公司资料"></a>取得公司资料</h3><pre><code class="lang-sql">--1.取得所有员工的资料
+SELECT * FROM `employee`;
+--2.取得所有客户的资料
+SELECT * FROM `client`;
+--3.按薪水低到高取得员工的资料
+SELECT * FROM `employee` ORDER BY `salary`;
+--4.取得薪水前3高的员工
+SELECT * FROM `employee` ORDER BY `salary` DESC LIMIT 3;
+--5.取得所有员工的名字
+SELECT `name` FROM `employee`;
+若为性别，且不重复
+SELECT DISTINCT `sex` FROM `employee`;    --DISTINCT 取消重复
+</code></pre>
+<h3 id="aggregate-functions-聚合函数"><a href="#aggregate-functions-聚合函数" class="headerlink" title="aggregate functions 聚合函数"></a>aggregate functions 聚合函数</h3><pre><code class="lang-sql">--1.取得员工人数
+SELECT COUNT(*) FROM `employee`;    --5
+SELECT COUNT(sup_id) FROM `employee`;    --4
+--2.取得所有出生于1970-01-01之后的女性员工人数
+SELECT COUNT(*) FROM `employee` WHERE `birth_date` &gt; &#39;1970-01-01&#39; AND `sex` = &#39;F&#39;;
+--3.取得所有员工的平均薪水
+SELECT AVG(`salary`) FROM `employee`;
+--4.取得所有员工薪水的总和
+SELECT SUM(`salary`) FROM `employee`;
+--5.取得薪水最高的员工
+SELECT MAX(`salary`) FROM `employee`;
+--6.取得薪水最低的员工
+SELECT MIN(`salary`) FROM `employee`;
+</code></pre>
+<h3 id="wildcards-万用字元"><a href="#wildcards-万用字元" class="headerlink" title="wildcards 万用字元"></a>wildcards 万用字元</h3><p><code>%</code>代表多个字元，<code>_</code>代表一个字元</p>
+<pre><code class="lang-sql">--1.取得电话号码位数是335的客户
+SELECT * FROM `client` WHERE `phone` LIKE &#39;%335&#39;;
+--若开头是254
+SELECT * FROM `client` WHERE `phone` LIKE &#39;254%&#39;;
+--若中间有354
+SELECT * FROM `client` WHERE `phone` LIKE &#39;%354%&#39;;
+--2.取得姓艾的客户
+SELECT * FROM `client` WHERE `client_name` LIKE &#39;艾%&#39;;
+--3.取得生日在12月的员工
+SELECT * FROM `employee` WHERE `brith_date` LIKE &#39;_____12%&#39;;
+</code></pre>
+<h3 id="union-联集"><a href="#union-联集" class="headerlink" title="union 联集"></a>union 联集</h3><p>这里或许可以叫做并集？</p>
+<pre><code class="lang-sql">--1.员工名字 union 客户名字
+SELECT `name` AS `total_name`
+FROM `employee` 
+UNION 
+SELECT `client_name` 
+FROM `client`;
+--同理
+SELECT `name` 
+FROM `employee` 
+UNION 
+SELECT `client_name` 
+FROM `client` 
+UNION 
+SELECT `branch_name` 
+FROM `branch`;
+--2.员工id + 员工名字 union 客户id + 客户名字
+SELECT `emp_id` AS `total_id`,`name` AS `total_name`
+FROM `employee` 
+UNION 
+SELECT `client_id`,`client_name` 
+FROM `client`;
+--3.员工薪水 union 销售金额
+SELECT `salary` AS `total_money`
+FROM `employee` 
+UNION 
+SELECT `total_sales` 
+FROM `work_with`;
+</code></pre>
+<h3 id="join-连接"><a href="#join-连接" class="headerlink" title="join 连接"></a>join 连接</h3><pre><code class="lang-sql">INSERT INTO `branch` VALUES(4,&#39;偷懒&#39;,NULL);
+</code></pre>
+<pre><code class="lang-sql">--取得所有部门经理的名字
+SELECT *
+FROM `employee`
+JOIN `branch`
+ON `emp_id` = `manager_id`;
+--这样取得的数据属性多达十种比较冗杂，我们可以这样筛选必要属性
+SELECT `employee`.`emp_id`,`employee`.`name`,`branch`.`branch_name`    --这样出来的数据就只有三种
+FROM `employee`
+JOIN `branch`
+ON `employee`.`emp_id` = `branch`.`manager_id`;    --为了防止两个表格连接的时候有相同属性导致重名，我们可以在属性前加上表格名称作为前缀
+</code></pre>
+<pre><code class="lang-sql">SELECT `employee`.`emp_id`,`employee`.`name`,`branch`.`branch_name`
+FROM `employee` LEFT JOIN `branch`
+ON `employee`.`emp_id` = `branch`.`manager_id`;
+--LEFT JOIN 不管条件是否成立都会把左边表格的所有数据回传给我们，而右边的表格则是要条件成立才会回传给我们，不成立则都是NULL,在这里`employee`是左表格，`branch`是右表格
+--RIGHT JOIN同理
+SELECT `employee`.`emp_id`,`employee`.`name`,`branch`.`branch_name`
+FROM `employee` RIGHT JOIN `branch`
+ON `employee`.`emp_id` = `branch`.`manager_id`;
+</code></pre>
+<h3 id="subquery-子查询"><a href="#subquery-子查询" class="headerlink" title="subquery 子查询"></a>subquery 子查询</h3><pre><code class="lang-sql">--1.找出研发部门的经理名字
+SELECT `name`
+FROM `employee`
+WHERE `emp_id` = (
+    SELECT `manager_id`
+    FROM `branch`
+    WHERE `branch_name` = &#39;研发&#39;
+);
+--2.找出对单一位客户销售金额超过50000的员工名字
+SELECT `name`
+FROM `employee`
+WHERE `emp_id` IN (
+    SELECT `emp_id`
+    FROM `work_with`
+    WHERE `total_sales` &gt; 50000
+);
+</code></pre>
+<h3 id="ON-DELETE"><a href="#ON-DELETE" class="headerlink" title="ON DELETE"></a>ON DELETE</h3><p>简单来说<code>ON DELETE SET NULL</code>就是对应不到就把他设置成<code>NULL</code>，<code>ON DELETE CASCADE</code>就是对应不到就一起删掉.</p>
+<pre><code class="lang-sql">FOREIGN KEY (`manager_id`) REFERENCES `employee`(`emp_id`) ON DELETE SET NULL    
+--如果小绿离职，`emp_id`207不存在，`manager_id`设置为NULL
+FOREIGN KEY (`emp_id`) REFERENCES `employee`(`emp_id`) ON DELETE CASCADE,
+FOREIGN KEY (`client_id`) REFERENCES `client`(`client_id`) ON DELETE CASCADE
+----如果小绿离职，`emp_id`207不存在，`work_with`表格中那一行一起删掉,整笔资料删掉
+</code></pre>
+<pre><code class="lang-sql">DELETE FROM `employee`
+WHERE `emp_id` = 207;
+</code></pre>
+<h3 id="python-链接-MySQL"><a href="#python-链接-MySQL" class="headerlink" title="python 链接 MySQL"></a>python 链接 MySQL</h3><p>这里我使用<code>VS Code</code>来连接，直接在终端输入<code>python.exe -m pip install --upgrade pip</code>先把<code>pip</code>更新到最新版,再输入<code>python -m pip install mysql-connector-python</code>安装<code>mysql-connector</code>。</p>
+<pre><code class="lang-python">import mysql.connector
+
+connection = mysql.connector.connect(host=&#39;localhost&#39;,
+                                     port=&#39;3306&#39;,
+                                     user=&#39;root&#39;,
+                                     password=&#39;8umperMyS01&#39;,
+                                     database=&#39;sql_tutorial&#39;)
+
+cursor = connection.cursor()
+
+# 创建资料库
+# cursor.execute(&quot;CREATE DATABASE `qq`;&quot;)
+
+# 取得所有资料库的名称
+# cursor.execute(&quot;SHOW DATABASES;&quot;)
+# records = cursor.fetchall()
+# for r in records:
+#     print(r)
+
+# 选择资料库
+# cursor.execute(&quot;USE `sql_tutorial`;&quot;)
+
+#取得部门表格所有资料
+# cursor.execute(&#39;SELECT * FROM `branch`;&#39;)
+
+# records = cursor.fetchall()
+# for r in records:
+#     print(r)
+
+#新增
+# cursor.execute(&quot;INSERT INTO `branch` VALUES(5,&#39;qq&#39;,NULL)&quot;)
+
+#修改
+# cursor.execute(&quot;UPDATE `branch` SET `manager_id` = 206 WHERE `branch_id` = 4;&quot;)
+
+#删除
+# cursor.execute(&quot;DELETE FROM `branch` WHERE `branch_id` = 5;&quot;)
+
+cursor.close()
+connection.commit() #若要修改资料则必须加上
+connection.close()
+</code></pre>
+<p>这样我们就可以通过编写<code>Python</code>代码来修改我们的资料库了，当然<code>MySQL Workbench</code> 中可以同步查看这里不再一一列举。</p>
+]]></content>
+  </entry>
 </search>
